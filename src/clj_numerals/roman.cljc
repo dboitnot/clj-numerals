@@ -1,5 +1,6 @@
 (ns clj-numerals.roman
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str]
+            [clj-numerals.util :as util]))
 
 (def NUMERALS {\M 1000
                \D 500
@@ -40,9 +41,5 @@
        (reduce r-sum [0 0])
        first))
 
-(defn- r-sub [[ret r] [s v]]
-  [(str ret (str/join (repeat (-> r (/ v) int) s)))
-   (mod r v)])
-
 (defn n2roman [n]
-  (first (reduce r-sub ["" n] S-FORMS)))
+  (util/subtractive-encode S-FORMS n))

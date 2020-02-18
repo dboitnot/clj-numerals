@@ -1,4 +1,5 @@
-(ns clj-numerals.util)
+(ns clj-numerals.util
+  (:require [clojure.string :as str]))
 
 (defn decompose-by-powers [radix n]
   "returns a vector of the parts of n as powers of radix"
@@ -11,3 +12,12 @@
                                        lps
                                        (into parts [(-> r (/ p) int (* p))]))))))
 
+(defn subtractive-encode [subtractive-forms n]
+  "Returns a string of representation of n by repeated subtraction of subtractive-forms. subtractive-forms should be
+   a sequence of pairs in the form [<str> <value>] and in descending order."
+  (->> subtractive-forms
+       (reduce
+         (fn [[ret r] [s v]]
+           [(str ret (str/join (repeat (-> r (/ v) int) s)))
+            (mod r v)]) ["" n])
+       first))
