@@ -29,8 +29,8 @@
 
 (def SUBS-SHEM [["יה" "טו"] ["יו" "טז"]])
 
-(def MODES {:default {:geresh? true}
-            :year {:drop-thousands? true}})
+(def PRESETS {:default {:geresh? true}
+            :year      {:drop-thousands? true}})
 
 (defn- forms-with [{:keys [use-finals?]}]
   (if use-finals? (into NUMERALS-FINAL NUMERALS-TRAD)
@@ -61,10 +61,15 @@
   (util/decompose-by-powers 1000 nil n))
 
 (defn n2hebrew
+  ;; If no opts passed, go with the defaults.
   ([n] (n2hebrew :default n))
+
   ([opts n]
    (if (keyword? opts)
-     (n2hebrew (or (opts MODES) (throw (ex-info (str "unknown mode: " opts) {:mode opts}))) n)
+     ;; If opts is a keyword, look up the preset
+     (n2hebrew (or (opts PRESETS) (throw (ex-info (str "unknown mode: " opts) {:mode opts}))) n)
+
+     ;; Otherwise opts is a map
      (let [groups (->> n thousands-groups
                        (map #(encode-group opts %))
                        (group-mod-with opts))]
