@@ -1,5 +1,6 @@
 (ns clj-numerals.util
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str]
+            [clojure.spec.alpha :as s]))
 
 (defn decompose-by-powers [radix retain-mag n]
   "returns a vector of the parts of n as powers of radix"
@@ -29,6 +30,10 @@
     (->> (iterate inc 2)
          (take-while #(<= % l))
          (filter #(= 0 (mod n %))))))
+
+(s/fdef factors
+        :args (s/cat :n int?)
+        :ret (s/coll-of int?))
 
 (defn reciprocal-sum [frac]
   "returns a vector of integers whose reciprocals sum to frac"
