@@ -30,7 +30,7 @@
 (def SUBS-SHEM [["יה" "טו"] ["יו" "טז"]])
 
 (def PRESETS {:default {:geresh? true}
-            :year      {:drop-thousands? true}})
+              :year    {:drop-thousands? true}})
 
 (defn- forms-with [{:keys [use-finals?]}]
   (if use-finals? (into NUMERALS-FINAL NUMERALS-TRAD)
@@ -48,7 +48,7 @@
   (let [lc (last g)
         rs (->> g butlast str/join)]
     (if geresh?
-      (if (empty? rs) (str lc \׳) (str rs \״ lc) )
+      (if (empty? rs) (str lc \׳) (str rs \״ lc))
       g)))
 
 (defn- encode-group [opts n]
